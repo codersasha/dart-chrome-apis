@@ -1,0 +1,6 @@
+name:  chrome_api
+description:  A sample application
+
+dependencies:
+  js: { hosted: js }
+#  unittest: any
