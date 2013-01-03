@@ -239,10 +239,7 @@ class ChromeApi {
       converted_argument = argument;
     } else if (argument is ChromeObject) {
       // serializable object
-      print("I'm looking at a chrome object!");
-      print("Cap: ${argument.capacity}");
       converted_argument = _convertArgument(argument._serialize());
-      print("Cap 2: ${converted_argument.capacity}");
     } else if (argument is List) {
       // list
       converted_argument = _convertListArgument(argument);
