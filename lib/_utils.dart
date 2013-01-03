@@ -13,8 +13,49 @@ part of chrome;
  * Objects that are passable to JS need to implement this interface.
  */
 abstract class ChromeObject {
-  // Return a Map representation of this object,  (non-recursive).
+  /*
+   * Default Constructor
+   *
+   * Called by child objects during their regular construction.
+   */
+  ChromeObject() :
+    _jsObject = null;
+
+  /*
+   * Internal proxy constructor
+   *
+   * Creates a new object using this existing proxy.
+   */
+  ChromeObject._proxy(this._jsObject);
+
+  /*
+   * JS Object Representation
+   */
+  JSObject _jsObject;
+
+  /*
+   * Return a Map representation of this object's members, non-recursively.
+   */
   Map _toMap();
+
+  /*
+   * Return a non-recursive serialized representation of this object.
+   *
+   * Returns a Map representation, if this object has not yet been proxied, or
+   * the JS Proxy, if it has already been proxied.
+   */
+  Object _serialize() {
+    if (_jsObject == null)
+      return this._toMap();
+    return _jsObject;
+  }
+
+  /*
+   * Returns True if this object has a matching JS object, False otherwise.
+   */
+  bool _hasProxy() {
+    return this._jsObject != null;
+  }
 }
 
 /**
@@ -26,11 +67,15 @@ abstract class ChromeObject {
  */
 class JSObject {
   // The JS object itself
-  js.Proxy _jsObject;
+  js.Proxy _proxy;
 
-  JSObject(this._jsObject);
+  JSObject(this._proxy);
 
   /**
+   * Method calls
+   */
+
+  /*
    * A scoped function call in Javascript to the given function on the given
    * object with the given list of arguments. Does not return anything.
    *
@@ -38,11 +83,11 @@ class JSObject {
    */
   void voidFunctionCall(String name, [ List arguments ]) {
     js.scoped(() {
-      _jsObject.callMethod(name, ChromeApi._convertArgument(arguments));
+      _proxy.callMethod(name, ChromeApi._convertArgument(arguments));
     });
   }
 
-  /**
+  /*
    * A scoped function call in Javascript to the given function on the given
    * object with the given list of arguments. Returns a base type (string, num,
    * int, bool).
@@ -53,13 +98,13 @@ class JSObject {
     var __retval;
 
     js.scoped(() {
-      __retval = _jsObject.callMethod(name, ChromeApi._convertArgument(arguments));
+      __retval = _proxy.callMethod(name, ChromeApi._convertArgument(arguments));
     });
 
     return __retval;
   }
 
-  /**
+  /*
    * A scoped function call in Javascript to the given function on the given
    * object with the given list of arguments. Returns a non-base type (generic
    * object Proxy) as a wrapped JSObject.
@@ -70,42 +115,69 @@ class JSObject {
     var __retval;
 
     js.scoped(() {
-      __retval = js.retain(_jsObject.callMethod(name, ChromeApi._convertArgument(arguments)));
+      __retval = js.retain(_proxy.callMethod(name, ChromeApi._convertArgument(arguments)));
     });
 
     return new JSObject(__retval);
   }
 
   /**
+   * Getters
+   */
+
+  /*
    * A scoped member variable resolve in Javascript. Returns a base type.
    */
   Object baseTypeMemberVariable(String name) {
     var __retval;
     js.scoped(() {
-      __retval = _jsObject[name];
+      __retval = _proxy[name];
     });
     return __retval;
   }
 
-  /**
+  /*
    * A scoped member variable resolve in Javascript. Returns a JSObject proxy,
    * ready for wrapping with a custom class.
+   *
+   * TODO(sashab): js.retain memory leaks in JS; needs js.release in destructor
+   * for JSObject
    */
   JSObject objectMemberVariable(String name, [ List arguments ]) {
     var __retval;
     js.scoped(() {
-      __retval = js.retain(_jsObject[name]);
+      __retval = js.retain(_proxy[name]);
     });
     return new JSObject(__retval);
   }
 
-  /**
-   * A scoped member variable resolve in Javascript. Returns a generic Proxy object.
-   * TODO(sashab): Memory leaks
+  /*
+   * A scoped member variable resolve in Javascript. Returns a generic Proxy
+   * object, on which all methods are available. Calls are passed directly to
+   * their underlying JS objects.
+   *
+   * TODO(sashab): Scoped memory leaks; needs js.$experimentalExitScope() in
+   * destructor for a wrapped js.Proxy
    */
   js.Proxy genericProxyMemberVariable(String name) {
     js.$experimentalEnterScope();
-    return _jsObject[name];
+    return js.retain(_proxy[name]);
+  }
+
+  /**
+   * Setters
+   */
+
+  /*
+   * Sets the member with name 'name' to value 'value'.
+   *
+   * The given object is converted to a JS-friendly type using
+   * ChromeApi._convertArgument.
+   */
+  void setMemberVariable(String name, Object value) {
+    js.scoped(() {
+      _proxy[name] = ChromeApi._convertArgument(value);
+    });
   }
 
 }
@@ -159,12 +231,18 @@ class ChromeApi {
     } else if (argument is num || argument is String || argument is bool) {
       // base type
       converted_argument = argument;
+    } else if (argument is JSObject) {
+      // already proxied
+      converted_argument = argument._jsObject;
     } else if (argument is js.Proxy) {
       // already serialized
       converted_argument = argument;
     } else if (argument is ChromeObject) {
       // serializable object
-      converted_argument = js.map(_convertMapArgument(argument._toMap()));
+      print("I'm looking at a chrome object!");
+      print("Cap: ${argument.capacity}");
+      converted_argument = _convertArgument(argument._serialize());
+      print("Cap 2: ${converted_argument.capacity}");
     } else if (argument is List) {
       // list
       converted_argument = _convertListArgument(argument);

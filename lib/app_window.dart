@@ -8,84 +8,114 @@ class CreateWindowOptions extends ChromeObject {
   // Id to identify the window. This will be used to remember the size
   // and position of the window and restore that geometry when a window
   // with the same id (and no explicit size or position) is later opened.
-  String id;
+  String _id;
 
   // Default width of the window. (Deprecated; regular bounds act like this
   // now.)
-  int defaultWidth;
+  int _defaultWidth;
 
   // Default height of the window. (Deprecated; regular bounds act like this
   // now.)
-  int defaultHeight;
+  int _defaultHeight;
 
   // Default X coordinate of the window. (Deprecated; regular bounds act like
   // this now.)
-  int defaultLeft;
+  int _defaultLeft;
 
   // Default Y coordinate of the window. (Deprecated; regular bounds act like
   // this now.)
-  int defaultTop;
+  int _defaultTop;
 
   // Width of the window. (Deprecated; use 'bounds'.)
-  int width;
+  int _width;
 
   // Height of the window. (Deprecated; use 'bounds'.)
-  int height;
+  int _height;
 
   // X coordinate of the window. (Deprecated; use 'bounds'.)
-  int left;
+  int _left;
 
   // Y coordinate of the window. (Deprecated; use 'bounds'.)
-  int top;
+  int _top;
 
   // Minimium width of the window.
-  int minWidth;
+  int _minWidth;
 
   // Minimum height of the window.
-  int minHeight;
+  int _minHeight;
 
   // Maximum width of the window.
-  int maxWidth;
+  int _maxWidth;
 
   // Maximum height of the window.
-  int maxHeight;
+  int _maxHeight;
 
   // Window type: 'shell' (the default) is the only currently supported value.
-  String type;
+  String _type;
 
   // Frame type: 'none' or 'chrome' (defaults to 'chrome').
-  String frame;
+  String _frame;
 
   // Size of the content in the window (excluding the titlebar). If specified
   // in addition to any of the left/top/width/height parameters, this field
   // takes precedence. If a frameBounds is specified, the frameBounds take
   // precedence.
-  Bounds bounds;
+  Bounds _bounds;
 
   // If true, the window will be created in a hidden state. Call show() on
   // the window to show it once it has been created. Defaults to false.
-  bool hidden;
+  bool _hidden;
 
+  /*
+   * Public constructor
+   */
   CreateWindowOptions({
-    this.id,
-    this.defaultWidth,
-    this.defaultHeight,
-    this.defaultLeft,
-    this.defaultTop,
-    this.width,
-    this.height,
-    this.left,
-    this.top,
-    this.minWidth,
-    this.minHeight,
-    this.maxWidth,
-    this.maxHeight,
-    this.type,
-    this.frame,
-    this.bounds,
-    this.hidden
-  });
+    String id,
+    int defaultWidth,
+    int defaultHeight,
+    int defaultLeft,
+    int defaultTop,
+    int width,
+    int height,
+    int left,
+    int top,
+    int minWidth,
+    int minHeight,
+    int maxWidth,
+    int maxHeight,
+    String type,
+    String frame,
+    Bounds bounds,
+    bool hidden
+  }) :
+    _id = id,
+    _defaultWidth = defaultWidth,
+    _defaultHeight = defaultHeight,
+    _defaultLeft = defaultLeft,
+    _defaultTop = defaultTop,
+    _width = width,
+    _height = height,
+    _left = left,
+    _top = top,
+    _minWidth = minWidth,
+    _minHeight = minHeight,
+    _maxWidth = maxWidth,
+    _maxHeight = maxHeight,
+    _type = type,
+    _frame = frame,
+    _bounds = bounds,
+    _hidden = hidden
+  ;
 
+  /*
+   * Private constructor
+   */
+  CreateWindowOptions._proxy(JSObject _jsObject)
+      : super._proxy(_jsObject);
+
+  /*
+   * Serialisation method
+   */
   Map _toMap() {
     Map m = {};
     if (id != null) m['id'] = id;
@@ -107,45 +137,349 @@ class CreateWindowOptions extends ChromeObject {
     if (hidden != null) m['hidden'] = hidden;
     return m;
   }
-}
 
-class Bounds extends ChromeObject {
-  int left;
-  int top;
-  int width;
-  int height;
+  /*
+   * Public accessors
+   */
+  String get id {
+    if (!this._hasProxy())
+      return this._id;
+    return this._jsObject.baseTypeMemberVariable('id');
+  }
 
-  Bounds({this.left, this.top, this.width, this.height});
+  void set id(String id) {
+    if (!this._hasProxy())
+      this._id = id;
+    else
+      this._jsObject.setMemberVariable('id', id);
+  }
 
-  Map _toMap() {
-    return {
-      'left': left,
-      'top': top,
-      'width': width,
-      'height': height
-    };
+  int get defaultWidth {
+    if (!this._hasProxy())
+      return this._defaultWidth;
+    return this._jsObject.baseTypeMemberVariable('defaultWidth');
+  }
+
+  void set defaultWidth(int defaultWidth) {
+    if (!this._hasProxy())
+      this._defaultWidth = defaultWidth;
+    else
+      this._jsObject.setMemberVariable('defaultWidth', defaultWidth);
+  }
+
+  int get defaultHeight {
+    if (!this._hasProxy())
+      return this._defaultHeight;
+    return this._jsObject.baseTypeMemberVariable('defaultHeight');
+  }
+
+  void set defaultHeight(int defaultHeight) {
+    if (!this._hasProxy())
+      this._defaultHeight = defaultHeight;
+    else
+      this._jsObject.setMemberVariable('defaultHeight', defaultHeight);
+  }
+
+  int get defaultLeft {
+    if (!this._hasProxy())
+      return this._defaultLeft;
+    return this._jsObject.baseTypeMemberVariable('defaultLeft');
+  }
+
+  void set defaultLeft(int defaultLeft) {
+    if (!this._hasProxy())
+      this._defaultLeft = defaultLeft;
+    else
+      this._jsObject.setMemberVariable('defaultLeft', defaultLeft);
+  }
+
+  int get defaultTop {
+    if (!this._hasProxy())
+      return this._defaultTop;
+    return this._jsObject.baseTypeMemberVariable('defaultTop');
+  }
+
+  void set defaultTop(int defaultTop) {
+    if (!this._hasProxy())
+      this._defaultTop = defaultTop;
+    else
+      this._jsObject.setMemberVariable('defaultTop', defaultTop);
+  }
+
+  int get width {
+    if (!this._hasProxy())
+      return this._width;
+    return this._jsObject.baseTypeMemberVariable('width');
+  }
+
+  void set width(int width) {
+    if (!this._hasProxy())
+      this._width = width;
+    else
+      this._jsObject.setMemberVariable('width', width);
+  }
+
+  int get height {
+    if (!this._hasProxy())
+      return this._height;
+    return this._jsObject.baseTypeMemberVariable('height');
+  }
+
+  void set height(int height) {
+    if (!this._hasProxy())
+      this._height = height;
+    else
+      this._jsObject.setMemberVariable('height', height);
+  }
+
+  int get left {
+    if (!this._hasProxy())
+      return this._left;
+    return this._jsObject.baseTypeMemberVariable('left');
+  }
+
+  void set left(int left) {
+    if (!this._hasProxy())
+      this._left = left;
+    else
+      this._jsObject.setMemberVariable('left', left);
+  }
+
+  int get top {
+    if (!this._hasProxy())
+      return this._top;
+    return this._jsObject.baseTypeMemberVariable('top');
+  }
+
+  void set top(int top) {
+    if (!this._hasProxy())
+      this._top = top;
+    else
+      this._jsObject.setMemberVariable('top', top);
+  }
+
+  int get minWidth {
+    if (!this._hasProxy())
+      return this._minWidth;
+    return this._jsObject.baseTypeMemberVariable('minWidth');
+  }
+
+  void set minWidth(int minWidth) {
+    if (!this._hasProxy())
+      this._minWidth = minWidth;
+    else
+      this._jsObject.setMemberVariable('minWidth', minWidth);
+  }
+
+  int get minHeight {
+    if (!this._hasProxy())
+      return this._minHeight;
+    return this._jsObject.baseTypeMemberVariable('minHeight');
+  }
+
+  void set minHeight(int minHeight) {
+    if (!this._hasProxy())
+      this._minHeight = minHeight;
+    else
+      this._jsObject.setMemberVariable('minHeight', minHeight);
+  }
+
+  int get maxWidth {
+    if (!this._hasProxy())
+      return this._maxWidth;
+    return this._jsObject.baseTypeMemberVariable('maxWidth');
+  }
+
+  void set maxWidth(int maxWidth) {
+    if (!this._hasProxy())
+      this._maxWidth = maxWidth;
+    else
+      this._jsObject.setMemberVariable('maxWidth', maxWidth);
+  }
+
+  int get maxHeight {
+    if (!this._hasProxy())
+      return this._maxHeight;
+    return this._jsObject.baseTypeMemberVariable('maxHeight');
+  }
+
+  void set maxHeight(int maxHeight) {
+    if (!this._hasProxy())
+      this._maxHeight = maxHeight;
+    else
+      this._jsObject.setMemberVariable('maxHeight', maxHeight);
+  }
+
+  String get type {
+    if (!this._hasProxy())
+      return this._type;
+    return this._jsObject.baseTypeMemberVariable('type');
+  }
+
+  void set type(String type) {
+    if (!this._hasProxy())
+      this._type = type;
+    else
+      this._jsObject.setMemberVariable('type', type);
+  }
+
+  String get frame {
+    if (!this._hasProxy())
+      return this._frame;
+    return this._jsObject.baseTypeMemberVariable('frame');
+  }
+
+  void set frame(String frame) {
+    if (!this._hasProxy())
+      this._frame = frame;
+    else
+      this._jsObject.setMemberVariable('frame', frame);
+  }
+
+  Bounds get bounds {
+    if (!this._hasProxy())
+      return this._bounds;
+    return new Bounds._proxy(this._jsObject.objectMemberVariable('bounds'));
+  }
+
+  void set bounds(Bounds bounds) {
+    if (!this._hasProxy())
+      this._bounds = bounds;
+    else
+      this._jsObject.setMemberVariable('bounds', bounds);
+  }
+
+  bool get hidden {
+    if (!this._hasProxy())
+      return this._hidden;
+    return this._jsObject.baseTypeMemberVariable('hidden');
+  }
+
+  void set hidden(bool hidden) {
+    if (!this._hasProxy())
+      this._hidden = hidden;
+    else
+      this._jsObject.setMemberVariable('hidden', hidden);
   }
 }
 
-class AppWindow {
-  /**
-   * JS Object Representation
-   */
-  JSObject _jsObject;
+class Bounds extends ChromeObject {
+  int _left;
+  int _top;
+  int _width;
+  int _height;
 
-  /**
-   * Constructor
+  /*
+   * Public constructor
    */
-  AppWindow(this._jsObject);
+  Bounds({
+    int left,
+    int top,
+    int width,
+    int height
+  }) :
+    _left = left,
+    _top = top,
+    _width = width,
+    _height = height
+  ;
 
-  /**
-   * Members (get only)
+
+  /*
+   * Private constructor
    */
+  Bounds._proxy(JSObject _jsObject)
+      : super._proxy(_jsObject);
+
+  /*
+   * Serialisation method
+   */
+  Map _toMap() {
+    Map m = {};
+    if (left != null) m['left'] = left;
+    if (top != null) m['top'] = top;
+    if (width != null) m['width'] = width;
+    if (height != null) m['height'] = height;
+    return m;
+  }
+
+  /*
+   * Public accessors
+   */
+  int get left {
+    if (!this._hasProxy())
+      return this._left;
+    return this._jsObject.baseTypeMemberVariable('left');
+  }
+
+  void set left(int left) {
+    if (!this._hasProxy())
+      this._left = left;
+    else
+      this._jsObject.setMemberVariable('left', left);
+  }
+  int get top {
+    if (!this._hasProxy())
+      return this._top;
+    return this._jsObject.baseTypeMemberVariable('top');
+  }
+
+  void set top(int top) {
+    if (!this._hasProxy())
+      this._top = top;
+    else
+      this._jsObject.setMemberVariable('top', top);
+  }
+  int get width {
+    if (!this._hasProxy())
+      return this._width;
+    return this._jsObject.baseTypeMemberVariable('width');
+  }
+
+  void set width(int width) {
+    if (!this._hasProxy())
+      this._width = width;
+    else
+      this._jsObject.setMemberVariable('width', width);
+  }
+  int get height {
+    if (!this._hasProxy())
+      return this._height;
+    return this._jsObject.baseTypeMemberVariable('height');
+  }
+
+  void set height(int height) {
+    if (!this._hasProxy())
+      this._height = height;
+    else
+      this._jsObject.setMemberVariable('height', height);
+  }
+}
+
+class AppWindow extends ChromeObject {
   // The JavaScript 'window' object for the created child.
-  // TODO: return actual window object - maybe using dart:html library
+  // TODO(sashab): return actual window object - maybe using dart:html library
   //global get contentWindow;
 
-  /**
+  /*
+   * Public constructor
+   */
+  AppWindow();
+
+  /*
+   * Private constructor
+   */
+  AppWindow._proxy(JSObject _jsObject)
+      : super._proxy(_jsObject);
+
+  /*
+   * Serialisation method
+   */
+  Map _toMap() {
+    return {};
+  }
+
+  /*
    * Functions
    */
   // Focus the window.

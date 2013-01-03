@@ -4,6 +4,7 @@ import 'dart:html' as html;
 
 part '_utils.dart';
 
+part 'box.dart';
 part 'alarms.dart';
 part 'events.dart';
 part 'app_runtime.dart';

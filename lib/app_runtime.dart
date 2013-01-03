@@ -8,30 +8,42 @@ part of chrome;
 // A WebIntents intent object. Deprecated.
 class Intent extends ChromeObject {
   // The WebIntent being invoked.
-  String action;
+  String _action;
 
   // The MIME type of the data.
-  String type;
+  String _type;
 
   // Data associated with the intent.
-  var data;
+  var _data;
 
   // Callback to be compatible with WebIntents.
-  Function postResult;
+  Function _postResult;
 
   // Callback to be compatible with WebIntents.
-  Function postFailure;
+  Function _postFailure;
 
   /*
-   * Constructor
+   * Public constructor
    */
   Intent({
-    this.action,
-    this.type,
-    this.data,
-    void this.postResult(),
-    void this.postFailure()
-  });
+    String action,
+    String type,
+    var data,
+    Function postResult,
+    Function postFailure
+  }) :
+    _action = action,
+    _type = type,
+    _data = data,
+    _postResult = postResult,
+    _postFailure = postFailure
+  ;
+
+  /*
+   * Private constructor
+   */
+  Intent._proxy(JSObject _jsObject)
+      : super._proxy(_jsObject);
 
   /*
    * Serialisation method
@@ -45,25 +57,107 @@ class Intent extends ChromeObject {
     if (postFailure != null) m['postFailure'] = postFailure;
     return m;
   }
+
+  /*
+   * Public accessors
+   */
+  String get action {
+    if (!this._hasProxy())
+      return this._action;
+    return this._jsObject.baseTypeMemberVariable('action');
+  }
+
+  void set action(String action) {
+    if (!this._hasProxy())
+      this._action = action;
+    else
+      this._jsObject.setMemberVariable('action', action);
+  }
+
+  String get type {
+    if (!this._hasProxy())
+      return this._type;
+    return this._jsObject.baseTypeMemberVariable('type');
+  }
+
+  void set type(String type) {
+    if (!this._hasProxy())
+      this._type = type;
+    else
+      this._jsObject.setMemberVariable('type', type);
+  }
+
+  Object get data {
+    if (!this._hasProxy())
+      return this._data;
+    return this._jsObject.genericProxyMemberVariable('data');
+  }
+
+  void set data(var data) {
+    if (!this._hasProxy())
+      this._data = data;
+    else
+      this._jsObject.setMemberVariable('data', data);
+  }
+
+  /*
+   * TODO(sashab): How to return function objects from JS? Invocation causes
+   * "Illegal invocation".
+   */
+  Function get postResult {
+    if (!this._hasProxy())
+      return this._postResult;
+    return this._jsObject.genericProxyMemberVariable('postResult');
+  }
+
+  void set postResult(Function postResult) {
+    if (!this._hasProxy())
+      this._postResult = postResult;
+    else
+      this._jsObject.setMemberVariable('postResult', postResult);
+  }
+
+  Function get postFailure {
+    if (!this._hasProxy())
+      return this._postFailure;
+    return this._jsObject.genericProxyMemberVariable('postFailure');
+  }
+
+  void set postFailure(Function postFailure) {
+    if (!this._hasProxy())
+      this._postFailure = postFailure;
+    else
+      this._jsObject.setMemberVariable('postFailure', postFailure);
+  }
+
 }
 
 class LaunchItem extends ChromeObject {
   // FileEntry for the file.
-  html.FileEntry entry;
+  html.FileEntry _entry;
 
   // The MIME type of the file.
-  String type;
+  String _type;
 
   /*
-   * Constructor
+   * Public constructor
    */
   LaunchItem({
-    this.entry,
-    this.type
-  });
+    html.FileEntry entry,
+    String type
+  }) :
+    _entry = entry,
+    _type = type
+  ;
 
   /*
-   * Serialisation function
+   * Private constructor
+   */
+  LaunchItem._proxy(JSObject _jsObject)
+      : super._proxy(_jsObject);
+
+  /*
+   * Serialisation method
    */
   Map _toMap() {
     Map m = {};
@@ -71,25 +165,68 @@ class LaunchItem extends ChromeObject {
     if (type != null) m['type'] = type;
     return m;
   }
+
+  /*
+   * Public accessors
+   */
+  /* TODO(sashab): Find a way to cast to html.FileEntry. */
+  html.FileEntry get entry {
+    if (!this._hasProxy())
+      return this._entry;
+    return this._jsObject.genericProxyMemberVariable('entry');
+  }
+
+  /* TODO(sashab): Find a way to serialize a html.FileEntry. */
+  void set entry(html.FileEntry entry) {
+    if (!this._hasProxy())
+      this._entry = entry;
+    else
+      this._jsObject.setMemberVariable('entry', entry);
+  }
+
+  String get type {
+    if (!this._hasProxy())
+      return this._type;
+    return this._jsObject.baseTypeMemberVariable('type');
+  }
+
+  void set type(String type) {
+    if (!this._hasProxy())
+      this._type = type;
+    else
+      this._jsObject.setMemberVariable('type', type);
+  }
+
+
 }
 
 // Optional data for the launch.
 class LaunchData extends ChromeObject {
-  Intent intent;
+  Intent _intent;
 
   // The id of the file handler that the app is being invoked with.
-  String id;
+  String _id;
 
-  List<LaunchItem> items;
+  List<LaunchItem> _items;
 
   /*
-   * Constructor
+   * Public constructor
    */
   LaunchData({
-    this.intent,
-    this.id,
-    this.items
-  });
+    Intent intent,
+    String id,
+    List<LaunchItem> items
+  }) :
+    _intent = intent,
+    _id = id,
+    _items = items
+  ;
+
+  /*
+   * Private constructor
+   */
+  LaunchData._proxy(JSObject _jsObject)
+      : super._proxy(_jsObject);
 
   /*
    * Serialisation method
@@ -101,32 +238,131 @@ class LaunchData extends ChromeObject {
     if (items != null) m['items'] = items;
     return m;
   }
+
+  /*
+   * Public accessors
+   */
+  Intent get intent {
+    if (!this._hasProxy())
+      return this._intent;
+    return new Intent._proxy(this._jsObject.objectMemberVariable('intent'));
+  }
+
+  void set intent(Intent intent) {
+    if (!this._hasProxy())
+      this._intent = intent;
+    else
+      this._jsObject.setMemberVariable('intent', intent);
+  }
+
+  String get id {
+    if (!this._hasProxy())
+      return this._id;
+    return this._jsObject.baseTypeMemberVariable('id');
+  }
+
+  void set id(String id) {
+    if (!this._hasProxy())
+      this._id = id;
+    else
+      this._jsObject.setMemberVariable('id', id);
+  }
+
+  /* TODO(sashab): Wrap lists of custom types when returning. */
+  List<LaunchItem> get items {
+    if (!this._hasProxy())
+      return this._items;
+    return this._jsObject.genericProxyMemberVariable('items');
+  }
+
+  void set items(List<LaunchItem> items) {
+    if (!this._hasProxy())
+      this._items = items;
+    else
+      this._jsObject.setMemberVariable('items', items);
+  }
 }
 
 class IntentResponse extends ChromeObject {
   // Identifies the intent.
-  int intentId;
+  int _intentId;
 
   // Was this intent successful? (i.e., postSuccess vs postFailure).
-  bool success;
+  bool _success;
 
   // Data associated with the intent response.
-  var data;
+  Object _data;
 
   /*
-   * Constructor
+   * Public constructor
    */
-  IntentResponse({this.intentId, this.success, this.data});
+  IntentResponse({
+    int intentId,
+    bool success,
+    Object data
+  }) :
+    _intentId = intentId,
+    _success = success,
+    _data = data
+  ;
+
+  /*
+   * Private constructor
+   */
+  IntentResponse._proxy(JSObject _jsObject)
+      : super._proxy(_jsObject);
 
   /*
    * Serialisation method
    */
   Map _toMap() {
-    return {
-      'intentId': intentId,
-      'success': success,
-      'data': data
-    };
+    Map m = {};
+    if (intentId != null) m['intentId'] = intentId;
+    if (success != null) m['success'] = success;
+    if (data != null) m['data'] = data;
+    return m;
+  }
+
+  /*
+   * Public accessors
+   */
+  int get intentId {
+    if (!this._hasProxy())
+      return this._intentId;
+    return this._jsObject.baseTypeMemberVariable('intentId');
+  }
+
+  void set intentId(int intentId) {
+    if (!this._hasProxy())
+      this._intentId = intentId;
+    else
+      this._jsObject.setMemberVariable('intentId', intentId);
+  }
+
+  bool get success {
+    if (!this._hasProxy())
+      return this._success;
+    return this._jsObject.baseTypeMemberVariable('success');
+  }
+
+  void set success(bool success) {
+    if (!this._hasProxy())
+      this._success = success;
+    else
+      this._jsObject.setMemberVariable('success', success);
+  }
+
+  Object get data {
+    if (!this._hasProxy())
+      return this._data;
+    return this._jsObject.genericProxyMemberVariable('data');
+  }
+
+  void set data(var data) {
+    if (!this._hasProxy())
+      this._data = data;
+    else
+      this._jsObject.setMemberVariable('data', data);
   }
 }
 

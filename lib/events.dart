@@ -4,28 +4,100 @@ part of chrome;
 /**
  * Description of a declarative rule for handling events.
  */
-class Rule {
-  /**
-   * JS Object Representation
+class Rule extends ChromeObject {
+  String _id;
+  List _conditions;
+  List _actions;
+  int _priority;
+
+  /*
+   * Public constructor
    */
-  JSObject _jsObject;
+  Rule({
+    String id,
+    List conditions,
+    List actions,
+    int priority
+  }) :
+    _id = id,
+    _conditions = conditions,
+    _actions = actions,
+    _priority = priority
+  ;
 
-  /**
-   * Constructor
+  /*
+   * Private constructor
    */
-  Rule(this._jsObject);
+  Rule._proxy(JSObject _jsObject)
+      : super._proxy(_jsObject);
 
-  /* Optional identifier that allows referencing this rule. */
-  String get id => _jsObject.baseTypeMemberVariable('id');
+  /*
+   * Serialisation method
+   */
+  Map _toMap() {
+    Map m = {};
+    if (id != null) m['id'] = id;
+    if (conditions != null) m['conditions'] = conditions;
+    if (actions != null) m['actions'] = actions;
+    if (priority != null) m['priority'] = priority;
+    return m;
+  }
 
-  /* List of conditions that can trigger the actions. */
-  List get conditions => _jsObject.baseTypeMemberVariable('conditions');
+  /*
+   * Public accessors
+   */
+  String get id {
+    if (!this._hasProxy())
+      return this._id;
+    return this._jsObject.baseTypeMemberVariable('id');
+  }
 
-  /* List of actions that are triggered if one of the condtions is fulfilled. */
-  List get actions => _jsObject.baseTypeMemberVariable('actions');
+  void set id(String id) {
+    if (!this._hasProxy())
+      this._id = id;
+    else
+      this._jsObject.setMemberVariable('id', id);
+  }
 
-  /* Optional priority of this rule. Defaults to 100. */
-  int get priority => _jsObject.baseTypeMemberVariable('priority');
+  List get conditions {
+    if (!this._hasProxy())
+      return this._conditions;
+    return this._jsObject.baseTypeMemberVariable('conditions');
+  }
+
+  void set conditions(List conditions) {
+    if (!this._hasProxy())
+      this._conditions = conditions;
+    else
+      this._jsObject.setMemberVariable('conditions', conditions);
+  }
+
+  List get actions {
+    if (!this._hasProxy())
+      return this._actions;
+    return this._jsObject.baseTypeMemberVariable('actions');
+  }
+
+  void set actions(List actions) {
+    if (!this._hasProxy())
+      this._actions = actions;
+    else
+      this._jsObject.setMemberVariable('actions', actions);
+  }
+
+  int get priority {
+    if (!this._hasProxy())
+      return this._priority;
+    return this._jsObject.baseTypeMemberVariable('priority');
+  }
+
+  void set priority(int priority) {
+    if (!this._hasProxy())
+      this._priority = priority;
+    else
+      this._jsObject.setMemberVariable('priority', priority);
+  }
+
 }
 
 /**
@@ -116,7 +188,7 @@ class __event {
 
         js.scoped(() {
           for (int i = 0; i < rules.length; i ++) {
-            __proxy_rules.add(new Rule(rules[i]));
+            __proxy_rules.add(new Rule._proxy(rules[i]));
           }
         });
 
@@ -148,7 +220,7 @@ class __event {
 
         js.scoped(() {
           for (int i = 0; i < rules.length; i ++) {
-            __proxy_rules.add(new Rule(rules[i]));
+            __proxy_rules.add(new Rule._proxy(rules[i]));
           }
         });
 

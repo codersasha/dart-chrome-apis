@@ -5,35 +5,91 @@ part of chrome;
  * Types
  */
 
-class Alarm {
-  /**
-   * JS Object Representation
-   */
-  JSObject _jsObject;
-
-  /**
-   * Constructor
-   */
-  Alarm(this._jsObject);
-
-  /**
-   * Members (get only)
-   */
-
+class Alarm extends ChromeObject {
   // Name of this alarm.
-  String get name =>
-      this._jsObject.baseTypeMemberVariable('name');
+  String _name;
 
   // Time at which this alarm was scheduled to fire, in milliseconds past the
   // epoch (e.g. <code>Date.now() + n</code>).  For performance reasons, the
   // alarm may have been delayed an arbitrary amount beyond this.
-  double get scheduledTime =>
-      this._jsObject.baseTypeMemberVariable('scheduledTime');
+  double _scheduledTime;
 
   // If not null, the alarm is a repeating alarm and will fire again in
   // <var>periodInMinutes</var> minutes.
-  double get periodInMinutes =>
-      this._jsObject.baseTypeMemberVariable('periodInMinutes');
+  double _periodInMinutes;
+
+  /*
+   * Public constructor
+   */
+  Alarm({
+    String name,
+    double scheduledTime,
+    double periodInMinutes
+  }) :
+      _name = name,
+      _scheduledTime = scheduledTime,
+      _periodInMinutes = periodInMinutes
+  ;
+
+  /*
+   * Private constructor
+   */
+  Alarm._proxy(JSObject _jsObject)
+      : super._proxy(_jsObject);
+
+  /*
+   * Serialisation method
+   */
+  Map _toMap() {
+    Map m = {};
+    if (name != null) m['name'] = name;
+    if (scheduledTime != null) m['scheduledTime'] = scheduledTime;
+    if (periodInMinutes != null) m['periodInMinutes'] = periodInMinutes;
+    return m;
+  }
+
+  /*
+   * Public accessors
+   */
+  String get name {
+    if (!this._hasProxy())
+      return this._name;
+    return this._jsObject.baseTypeMemberVariable('name');
+  }
+
+  void set name(String name) {
+    if (!this._hasProxy())
+      this._name = name;
+    else
+      this._jsObject.setMemberVariable('name', name);
+  }
+
+  double get scheduledTime {
+    if (!this._hasProxy())
+      return this._scheduledTime;
+    return this._jsObject.baseTypeMemberVariable('scheduledTime');
+  }
+
+  void set scheduledTime(double periodInMinutes) {
+    if (!this._hasProxy())
+      this._scheduledTime = scheduledTime;
+    else
+      this._jsObject.setMemberVariable('scheduledTime', scheduledTime);
+  }
+
+  double get periodInMinutes {
+    if (!this._hasProxy())
+      return this._periodInMinutes;
+    return this._jsObject.baseTypeMemberVariable('periodInMinutes');
+  }
+
+  void set periodInMinutes(double periodInMinutes) {
+    if (!this._hasProxy())
+      this._periodInMinutes = periodInMinutes;
+    else
+      this._jsObject.setMemberVariable('periodInMinutes', periodInMinutes);
+  }
+
 }
 
 // TODO(mpcomplete): rename to CreateInfo when http://crbug.com/123073 is
@@ -41,29 +97,39 @@ class Alarm {
 class AlarmCreateInfo extends ChromeObject {
   // Time at which the alarm should fire, in milliseconds past the epoch
   // (e.g. <code>Date.now() + n</code>).
-  double when;
+  double _when;
 
   // Length of time in minutes after which the <code>onAlarm</code> event
   // should fire.
   //
   // <!-- TODO: need minimum=0 -->
-  double delayInMinutes;
+  double _delayInMinutes;
 
   // If set, the onAlarm event should fire every <var>periodInMinutes</var>
   // minutes after the initial event specified by <var>when</var> or
   // <var>delayInMinutes</var>.  If not set, the alarm will only fire once.
   //
   // <!-- TODO: need minimum=0 -->
-  double periodInMinutes;
+  double _periodInMinutes;
 
   /*
-   * Constructor
+   * Public constructor
    */
   AlarmCreateInfo({
-    this.when,
-    this.delayInMinutes,
-    this.periodInMinutes
-  });
+    double when,
+    double delayInMinutes,
+    double periodInMinutes
+  }) :
+    _when = when,
+    _delayInMinutes = delayInMinutes,
+    _periodInMinutes = periodInMinutes
+  ;
+
+  /*
+   * Private constructor
+   */
+  AlarmCreateInfo._proxy(JSObject _jsObject)
+      : super._proxy(_jsObject);
 
   /*
    * Serialisation method
@@ -74,6 +140,48 @@ class AlarmCreateInfo extends ChromeObject {
     if (delayInMinutes != null) m['delayInMinutes'] = delayInMinutes;
     if (periodInMinutes != null) m['periodInMinutes'] = periodInMinutes;
     return m;
+  }
+
+  /*
+   * Public accessors
+   */
+  double get when {
+    if (!this._hasProxy())
+      return this._when;
+    return this._jsObject.baseTypeMemberVariable('when');
+  }
+
+  void set when(double when) {
+    if (!this._hasProxy())
+      this._when = when;
+    else
+      this._jsObject.setMemberVariable('when', when);
+  }
+
+  double get delayInMinutes {
+    if (!this._hasProxy())
+      return this._delayInMinutes;
+    return this._jsObject.baseTypeMemberVariable('delayInMinutes');
+  }
+
+  void set delayInMinutes(double delayInMinutes) {
+    if (!this._hasProxy())
+      this._delayInMinutes = delayInMinutes;
+    else
+      this._jsObject.setMemberVariable('delayInMinutes', delayInMinutes);
+  }
+
+  double get periodInMinutes {
+    if (!this._hasProxy())
+      return this._periodInMinutes;
+    return this._jsObject.baseTypeMemberVariable('periodInMinutes');
+  }
+
+  void set periodInMinutes(double periodInMinutes) {
+    if (!this._hasProxy())
+      this._periodInMinutes = periodInMinutes;
+    else
+      this._jsObject.setMemberVariable('periodInMinutes', periodInMinutes);
   }
 }
 
@@ -168,7 +276,7 @@ class _alarms {
 
         js.scoped(() {
           for (int i = 0; i < alarms.length; i ++) {
-            __proxy_alarms.add(new Alarm(alarms[i]));
+            __proxy_alarms.add(new Alarm._proxy(alarms[i]));
           }
         });
 
